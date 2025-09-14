@@ -1,43 +1,27 @@
-import TaskOpertation from "./utils/FileManager.js";
+import { Add } from "./Commands/CommandAdd.js";
+import { List } from "./Commands/CommandList.js";
+import TaskOperation from "./utils/FileManager.js";
 
 const [method, param, status] = process.argv.splice(2);
+const ACCTIONS = [
+  new Add(TaskOperation),
+  new List(TaskOperation),
+];
 
 const task = {
   description: param,
   status: status || 'done',
 };
 
+ACCTIONS.forEach(action => {
+  if (action.isMe(method)) {
+    action.execute(task);
+  }
+})
+
 switch (method) {
-  case 'add':
-    if (!param) {
-      console.log('Cannot create a task without a description');
-      break;
-    }
-
-    saveTask(task);
-    break;
-
   case 'list':
-    const tasks = TaskOpertation.listTasks();
-    if (tasks.length === 0) {
-      console.log('No tasks found');
-      break;
-    }
-
-    if (param) {
-      const filteredTasks = tasks.filter(task => task.status === param);
-
-      if (filteredTasks.length === 0) {
-        console.log('No tasks found with the specified status');
-        break;
-      }
-
-      console.log(filteredTasks);
-      break;
-    }
-
-    console.log(tasks);
-    break;
+    
 
   default:
     console.log('Unknown command');
