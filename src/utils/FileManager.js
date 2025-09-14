@@ -2,7 +2,7 @@ import fs from 'fs';
 
 export default class TaskOpertation {
   static listTasks = () => {
-    const data = fs.readFileSync('../../task.json', 'utf-8');
+    let data = fs.readFileSync('../../task.json', 'utf-8');
     data = JSON.parse(data);
 
     return data;
